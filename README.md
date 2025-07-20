@@ -1,0 +1,1 @@
+Optionally use https://github.com/ahujasid/blender-mcp

@@ -1,0 +1,11 @@
+name: depth
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - matplotlib
+  - opencv  # includes OpenEXR support on conda-forge
+  - jupyterlab   # optional, for running notebooks
+  - openexr-python
+  - imath
