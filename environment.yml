@@ -1,4 +1,4 @@
-name: depth
+name: 3d_cattle_demo
 channels:
   - conda-forge
 dependencies:
@@ -9,3 +9,4 @@ dependencies:
   - jupyterlab   # optional, for running notebooks
   - openexr-python
   - imath
+  - huggingface_hub[cli]

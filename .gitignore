@@ -1,4 +1,6 @@
-*.blend1
+.env
+data/
+
 .DS_Store
 .huskyrc.json
 out
