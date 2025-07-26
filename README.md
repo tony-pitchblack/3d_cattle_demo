@@ -17,6 +17,13 @@ sshfs \
   /home/bonting/3d_cattle_demo
 ```
 
+# FAQ
+## Failed push to HF repo
+Make sure all commits use git lfs:
+```bash
+git lfs migrate import --include="*.FBX,*.obj,*.stl,*.exr,*.STEP,*.blend,*.blend1,*.fspy"
+```
+
 # Misc
 ## Blender MCP
 Use Blender MCP for Cursor: https://github.com/ahujasid/blender-mcp
