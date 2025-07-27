@@ -1,4 +1,4 @@
-# Set up Flamenco server for remote gpu rendering
+# Set up remote rendering Flamenco server for remote gpu rendering
 
 1. Install Flamenco on server according to docs
 2. Create a shared directory to sync server render to client automatically
@@ -8,13 +8,40 @@ Assert permission for server user:
 sudo chown bonting:bonting /home/bonting/3d_cattle_demo
 ```
 
-On server use reverse ssh to mount via sshfs like:
+# Set up remote repo data storage via sshd
+On client create systemd oneshot unit that will mount your SSHFS share once at boot for user youruser. Place this file as /etc/systemd/system/mount-3d_cattle_demo.service:
+
 ```bash
-sshfs \
-  -p 2222 \
-  -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3,allow_other \
-  anton@localhost:/home/anton/3d_cattle_demo \
-  /home/bonting/3d_cattle_demo
+[Unit]
+Description=One-shot SSHFS mount for 3d_cattle_demo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=youruser
+# Ensure this directory exists and is owned by youruser before running:
+#   sudo mkdir -p /home/youruser/3d_cattle_demo
+#   sudo chown youruser:youruser /home/youruser/3d_cattle_demo
+ExecStart=/usr/bin/sshfs \
+  bonting@10.0.0.1:/home/bonting/3d_cattle_demo \
+  /home/youruser/3d_cattle_demo \
+  -o reconnect \
+  -o ServerAliveInterval=15 \
+  -o allow_other
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then:
+```bash
+sudo mkdir -p /home/youruser/3d_cattle_demo
+sudo chown youruser:youruser /home/youruser/3d_cattle_demo
+sudo systemctl daemon-reload
+sudo systemctl enable mount-3d_cattle_demo.service
+sudo systemctl start  mount-3d_cattle_demo.service
 ```
 
 # FAQ
