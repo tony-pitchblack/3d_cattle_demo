@@ -86,36 +86,21 @@ data/
 
 ---
 
-## Монтирование репозитория через SSHFS (пример systemd-юнита)
-Сохраните юнит по пути `/etc/systemd/system/mount-3d_cattle_demo.service`:
+## Монтирование репозитория через SSHFS
+Примонтировать удаленный репо локально:
 ```bash
-[Unit]
-Description=One-shot SSHFS mount for 3d_cattle_demo
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=oneshot
-User=youruser
-# Убедитесь, что каталог существует и принадлежит youruser
-ExecStart=/usr/bin/sshfs \
+sudo mkdir -p /home/anton/3d_cattle_demo
+sudo chown anton:anton /home/anton/3d_cattle_demo
+sshfs \
   bonting@10.0.0.1:/home/bonting/3d_cattle_demo \
-  /home/youruser/3d_cattle_demo \
+  /home/anton/3d_cattle_demo \
   -o reconnect \
   -o ServerAliveInterval=15 \
   -o allow_other
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target
 ```
-Активируем:
+Отмонтировать:
 ```bash
-sudo mkdir -p /home/youruser/3d_cattle_demo
-sudo chown youruser:youruser /home/youruser/3d_cattle_demo
-sudo systemctl daemon-reload
-sudo systemctl enable mount-3d_cattle_demo.service
-sudo systemctl start  mount-3d_cattle_demo.service
+sudo umount /home/anton/3d_cattle_demo
 ```
 
 ---
@@ -126,7 +111,15 @@ sudo systemctl start  mount-3d_cattle_demo.service
 ```bash
 git lfs migrate import --include="*.FBX,*.obj,*.stl,*.exr,*.STEP,*.blend,*.blend1,*.fspy"
 ```
+### Не открывается Flamenco UI в браузере
+Делаем следующий хак:
+1. Через консоль VSCode открываем инфу по активному воркер сервису
+```bash
+sudo systemctl status flamenco-worker.service
+```
+2. Кликаем адрес localhost://8080 или что там отобразится
 
+**TODO: пофиксить это - выполнять форвардинг портов без VSCode**
 ---
 
 ## Прочее
