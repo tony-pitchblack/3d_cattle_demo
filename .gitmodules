@@ -1,3 +1,0 @@
-[submodule "data"]
-    path = data
-    url  = https://:$HF_TOKEN@huggingface.co/datasets/exponenta/3d_cattle_demo
