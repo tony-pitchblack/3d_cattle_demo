@@ -9,4 +9,6 @@ dependencies:
   - jupyterlab   # optional, for running notebooks
   - openexr-python
   - imath
-  - huggingface_hub[cli]
+  - pip: 
+    - "huggingface_hub[cli,xet]"
+    # fix hf dependency to include xet
